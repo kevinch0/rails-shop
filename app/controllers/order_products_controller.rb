@@ -25,8 +25,10 @@ class OrderProductsController < ApplicationController
   # POST /order_products.json
   def create
     @order = current_order
-    @product = @order.order_products.new(product_params)
+
+    @order_product = @order.order_products.new(order_product_params)
     @order.save
+    @order_product.save
     session[:order_id] = @order.id
     redirect_to products_path
   end
@@ -49,11 +51,11 @@ class OrderProductsController < ApplicationController
   # DELETE /order_products/1
   # DELETE /order_products/1.json
   def destroy
-    @order = current_order
-    @product = @order.order_products.find(params[:id])
-    @product.destroy
-    @order.save
-    redirect_to cart_path
+    @order_product.destroy
+    respond_to do |format|
+      format.html { redirect_to products_url, notice: 'Order product was successfully destroyed.' }
+      format.json { head :no_content }
+    end
   end
 
   private
@@ -62,9 +64,9 @@ class OrderProductsController < ApplicationController
       @order_product = OrderProduct.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    # Never trust parameters from the scary internet, only allow the white list through. Removed order_id
     def order_product_params
-      params.require(:order_product).permit(:quantity, :product_id, :order_id)
+      params.require(:order_product).permit(:quantity, :product_id)
     end
 
     def product_params
