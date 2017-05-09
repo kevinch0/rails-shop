@@ -13,14 +13,13 @@
 
   <tbody>
     <% @products.each do |product| %>
-      <tr>
-        <td><%= product.price %></td>
-        <td><%= product.name %></td>
-        <td><%= link_to 'Show', product %></td>
-        <td><%= link_to 'Edit', edit_product_path(product) %></td>
-        <td><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
+     <p><%= product.name %> | <%= number_to_currency product.price %>
+     <%= form_for @order_product do |f| %>
+       <%= f.hidden_field :product_id, value: product.id %>
+       <%= f.number_field :quantity %>
+       <%= f.submit "Add to cart" %>
+     <% end %></p>
+   <% end %>
   </tbody>
 </table>
 

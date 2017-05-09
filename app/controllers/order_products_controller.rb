@@ -24,22 +24,17 @@ class OrderProductsController < ApplicationController
   # POST /order_products
   # POST /order_products.json
   def create
-    @order_product = OrderProduct.new(order_product_params)
-
-    respond_to do |format|
-      if @order_product.save
-        format.html { redirect_to @order_product, notice: 'Order product was successfully created.' }
-        format.json { render :show, status: :created, location: @order_product }
-      else
-        format.html { render :new }
-        format.json { render json: @order_product.errors, status: :unprocessable_entity }
-      end
-    end
+    @order = current_order
+    @product = @order.order_products.new(product_params)
+    @order.save
+    session[:order_id] = @order.id
+    redirect_to products_path
   end
 
   # PATCH/PUT /order_products/1
   # PATCH/PUT /order_products/1.json
   def update
+    debugger
     respond_to do |format|
       if @order_product.update(order_product_params)
         format.html { redirect_to @order_product, notice: 'Order product was successfully updated.' }
@@ -54,11 +49,11 @@ class OrderProductsController < ApplicationController
   # DELETE /order_products/1
   # DELETE /order_products/1.json
   def destroy
-    @order_product.destroy
-    respond_to do |format|
-      format.html { redirect_to order_products_url, notice: 'Order product was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    @order = current_order
+    @product = @order.order_products.find(params[:id])
+    @product.destroy
+    @order.save
+    redirect_to cart_path
   end
 
   private
@@ -70,5 +65,9 @@ class OrderProductsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_product_params
       params.require(:order_product).permit(:quantity, :product_id, :order_id)
+    end
+
+    def product_params
+      params.require(:order_product).permit(:quantity, :product_id)
     end
 end
