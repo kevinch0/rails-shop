@@ -27,7 +27,6 @@ class OrderProductsController < ApplicationController
     @order = current_order
     @order_product = @order.order_products.new(order_product_params)
     @order.save
-    debugger
     @order_product.save
     session[:order_id] = @order.id
     redirect_to products_path
@@ -52,7 +51,7 @@ class OrderProductsController < ApplicationController
   def destroy
     @order_product.destroy
     respond_to do |format|
-      format.html { redirect_to order_products_url, notice: 'Order product was successfully destroyed.' }
+      format.html { redirect_to products_url, notice: 'Order product was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

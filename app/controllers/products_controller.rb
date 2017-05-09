@@ -6,6 +6,8 @@ class ProductsController < ApplicationController
   def index
     @products = Product.all
     @order_product = current_order.order_products.new
+    # to view items in the cart
+    @order_products = current_order.order_products
   end
 
   # GET /products/1

@@ -1,11 +1,18 @@
-<div class="col-lg-3">
+<div class="col-lg-6">
   <div class="well sidebar-nav">
     <h3>Cart</h3>
     <ul class="nav nav-list">
       <li class="nav-header">Here are all your items</li>
-      <li><%= link_to "Link1", "/path1"  %></li>
-      <li><%= link_to "Link2", "/path2"  %></li>
-      <li><%= link_to "Link3", "/path3"  %></li>
+      <% if @order_products.any? %>
+        <% @order_products.each do |order_product| %>
+        <!-- pass order_product.id in id in the delete params -->
+          <p><%= order_product.product.name %> | <%= link_to "Delete", order_product_path(:id => order_product.id), :data => {:confirm => "You sure?", :method => "delete"} %></p>
+          <p> <%= number_to_currency order_product.product.price %> x <%= order_product.quantity %> = Total Price: <%= number_to_currency (order_product.product.price * order_product.quantity) %></p>
+        <% end %>
+        <p>Your Total: <%= number_to_currency current_order.total_price %></p>
+      <% else %>
+        <p>Your shopping cart is empty.</p>
+      <% end %>
     </ul>
   </div><!--/.well -->
 </div><!--/span-->
