@@ -5,10 +5,10 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="#">RailsShop</a>
+    <%= link_to "RailsShop", root_path, class:"navbar navbar-brand" %>
     <div class="navbar-collapse collapse navbar-responsive-collapse">
       <ul class="nav navbar-nav col-md-6">
-        <li><%= link_to "Link1", "/path1"  %></li>
+        <li><%= link_to "All Products", products_path %></li>
         <li><%= link_to "Link2", "/path2"  %></li>
         <li><%= link_to "Link3", "/path3"  %></li>
       </ul>
