@@ -8,7 +8,10 @@ class ApplicationController < ActionController::Base
     if session[:order_id]
       Order.find(session[:order_id])
     else
-      Order.new
+      @order = Order.new
+      @order.account_id = current_user.account.id
+      @order.save
+      Order.last
     end
   end
 end

@@ -5,7 +5,7 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     @products = Product.all
-    @order_products = :current_order
+    @order_product = current_order.order_products.new
   end
 
   # GET /products/1

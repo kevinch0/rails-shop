@@ -24,17 +24,13 @@ class OrderProductsController < ApplicationController
   # POST /order_products
   # POST /order_products.json
   def create
-    @order_product = OrderProduct.new(order_product_params)
-
-    respond_to do |format|
-      if @order_product.save
-        format.html { redirect_to @order_product, notice: 'Order product was successfully created.' }
-        format.json { render :show, status: :created, location: @order_product }
-      else
-        format.html { render :new }
-        format.json { render json: @order_product.errors, status: :unprocessable_entity }
-      end
-    end
+    @order = current_order
+    @order_product = @order.order_products.new(order_product_params)
+    @order.save
+    debugger
+    @order_product.save
+    session[:order_id] = @order.id
+    redirect_to products_path
   end
 
   # PATCH/PUT /order_products/1
@@ -67,8 +63,8 @@ class OrderProductsController < ApplicationController
       @order_product = OrderProduct.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    # Never trust parameters from the scary internet, only allow the white list through. Removed order_id
     def order_product_params
-      params.require(:order_product).permit(:quantity, :product_id, :order_id)
+      params.require(:order_product).permit(:quantity, :product_id)
     end
 end
